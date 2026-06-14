@@ -45,8 +45,11 @@ an7581_xg040g_ensure_mac()
 
 	lan_mac="$(macaddr_add "$mac" 1)"
 
+	# wan (eth1) is a plain device, so the interface macaddr applies. lan is a
+	# bridge (br-lan); its MAC must be set on the bridge device section,
+	# otherwise the bridge keeps deriving a random MAC from the conduit.
 	ucidef_set_interface_macaddr "wan" "$mac"
-	ucidef_set_interface_macaddr "lan" "$lan_mac"
+	ucidef_set_network_device_mac "br-lan" "$lan_mac"
 }
 
 board_config_update
