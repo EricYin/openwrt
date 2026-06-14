@@ -3,6 +3,7 @@
 # Copyright (c) 2011-2015 OpenWrt.org
 #
 
+. /lib/functions.sh
 . /lib/functions/uci-defaults.sh
 . /lib/functions/system.sh
 
@@ -28,18 +29,19 @@ an7581_xg040g_ensure_mac()
 	local board="$1"
 	local mac
 	local lan_mac
+	local idx
 
 	[ "$board" = "bell,xg-040g-md" ] || return 0
-	command -v fw_printenv >/dev/null 2>&1 || return 0
-	command -v fw_setenv >/dev/null 2>&1 || return 0
 
-	mac="$(fw_printenv -n ethaddr 2>/dev/null)"
+	# Read the factory MAC straight from the U-Boot "env" partition. We must
+	# not use fw_printenv here: this board.d script runs from config_generate
+	# before the uboot-envtools uci-default creates /etc/fw_env.config, so
+	# fw_printenv/fw_setenv are not usable yet at this point in boot.
+	idx="$(find_mtd_index env)"
+	[ -n "$idx" ] || return 0
+	mac="$(strings "/dev/mtd$idx" | sed -n 's/^ethaddr=//p' | head -n1)"
 	mac="$(macaddr_canonicalize "$mac")"
-
-	if [ -z "$mac" ]; then
-		mac="$(macaddr_random)"
-		fw_setenv ethaddr "$mac" >/dev/null 2>&1 || return 0
-	fi
+	[ -n "$mac" ] || return 0
 
 	lan_mac="$(macaddr_add "$mac" 1)"
 
