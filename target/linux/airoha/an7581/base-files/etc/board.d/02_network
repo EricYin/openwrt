@@ -15,7 +15,8 @@ an7581_setup_interfaces()
 	airoha,an7581-evb)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" "eth1"
 		;;
-	bell,xg-040g-md)
+	bell,xg-040g-md|\
+	nokia,xg-040g-md-tcboot)
 		ucidef_set_interfaces_lan_wan "lan2 lan3 lan4" "eth1"
 		;;
 	gemtek,w1700k-ubi)
@@ -41,7 +42,14 @@ an7581_xg040g_ensure_mac()
 	local lan_mac
 	local idx
 
-	[ "$board" = "bell,xg-040g-md" ] || return 0
+	case "$board" in
+	bell,xg-040g-md|\
+	nokia,xg-040g-md-tcboot)
+		;;
+	*)
+		return 0
+		;;
+	esac
 
 	# Read the factory MAC straight from the U-Boot "env" partition. We must
 	# not use fw_printenv here: this board.d script runs from config_generate
