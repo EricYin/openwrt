@@ -230,7 +230,7 @@
 			required-opps = <&smcc_opp12>;
 		};
 
-		opp-11500000000 {
+		opp-1150000000 {
 			opp-hz = /bits/ 64 <1150000000>;
 			required-opps = <&smcc_opp13>;
 		};
