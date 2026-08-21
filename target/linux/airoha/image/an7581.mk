@@ -172,6 +172,7 @@ define Device/nokia_xg-040g-md-tcboot
   $(call Device/nokia_xg-040g-md-common)
   DEVICE_VARIANT := (tcboot)
   DEVICE_DTS := an7581-nokia_xg-040g-md-tcboot
+  KERNEL_LOADADDR := 0x80088000
   KERNEL_SIZE := 8192k
   IMAGE_SIZE := 261120k
   KERNEL_IN_UBI := 1
