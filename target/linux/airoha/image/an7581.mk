@@ -90,26 +90,6 @@ define Device/airoha_an7581-evb-emmc-kite
 endef
 TARGET_DEVICES += airoha_an7581-evb-emmc-kite
 
-define Device/bell_xg-040g-md
-  $(call Device/FitImageLzma)
-  DEVICE_VENDOR := Nokia
-  DEVICE_MODEL := Bell XG-040G-MD
-  DEVICE_DTS := an7581-bell_xg-040g-md
-  SOC := an7581
-  KERNEL_LOADADDR := 0x80088000
-  BLOCKSIZE := 128k
-  PAGESIZE := 2048
-  KERNEL_SIZE := 8192k
-  IMAGE_SIZE := 261120k
-  KERNEL_IN_UBI := 1
-  UBINIZE_OPTS := -s 2048
-  IMAGES := factory.bin sysupgrade.bin
-  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi
-  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
-  DEVICE_PACKAGES := airoha-en7581-npu-firmware kmod-phy-airoha-en8811h kmod-i2c-an7581 kmod-leds-gpio kmod-gpio-button-hotplug uboot-envtools ubi-utils kmod-usb-storage-uas kmod-usb-net-cdc-ether kmod-fs-vfat kmod-fs-exfat kmod-fs-ext4 kmod-fs-ntfs3 blkid lsblk
-endef
-TARGET_DEVICES += bell_xg-040g-md
-
 define Device/gemtek_w1700k-ubi
   DEVICE_VENDOR := Gemtek
   DEVICE_MODEL := W1700K
@@ -192,18 +172,15 @@ define Device/nokia_xg-040g-md-tcboot
   $(call Device/nokia_xg-040g-md-common)
   DEVICE_VARIANT := (tcboot)
   DEVICE_DTS := an7581-nokia_xg-040g-md-tcboot
-  SUPPORTED_DEVICES += bell,xg-040g-md
-  SOC := an7581
   KERNEL_LOADADDR := 0x80088000
   KERNEL_SIZE := 8192k
   IMAGE_SIZE := 261120k
   KERNEL_IN_UBI := 1
-  UBINIZE_OPTS := -s 2048
+  UBINIZE_OPTS += -s 2048
   IMAGES := factory.bin sysupgrade.bin
   IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
-  DEVICE_PACKAGES += airoha-en7581-npu-firmware kmod-i2c-an7581 \
-	uboot-envtools ubi-utils
+  DEVICE_PACKAGES += ubi-utils
 endef
 TARGET_DEVICES += nokia_xg-040g-md-tcboot
 

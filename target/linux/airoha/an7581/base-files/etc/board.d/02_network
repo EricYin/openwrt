@@ -15,17 +15,14 @@ an7581_setup_interfaces()
 	airoha,an7581-evb)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" "eth1"
 		;;
-	bell,xg-040g-md|\
-	nokia,xg-040g-md-tcboot)
-		ucidef_set_interfaces_lan_wan "lan2 lan3 lan4" "eth1"
-		;;
 	gemtek,w1700k-ubi)
 		ucidef_set_interfaces_lan_wan "lan2 lan3 lan4" "wan"
 		;;
 	nokia,valyrian)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 10g" "wan"
 		;;
-	nokia,xg-040g-md |\
+	nokia,xg-040g-md|\
+	nokia,xg-040g-md-tcboot|\
 	nokia,xg-040g-md-ubi)
 		ucidef_set_interface_lan "lan1 lan2 lan3 lan4"
 		;;
@@ -35,21 +32,14 @@ an7581_setup_interfaces()
 	esac
 }
 
-an7581_xg040g_ensure_mac()
+an7581_xg040g_tcboot_ensure_mac()
 {
 	local board="$1"
 	local mac
 	local lan_mac
 	local idx
 
-	case "$board" in
-	bell,xg-040g-md|\
-	nokia,xg-040g-md-tcboot)
-		;;
-	*)
-		return 0
-		;;
-	esac
+	[ "$board" = "nokia,xg-040g-md-tcboot" ] || return 0
 
 	# Read the factory MAC straight from the U-Boot "env" partition. We must
 	# not use fw_printenv here: this board.d script runs from config_generate
@@ -63,17 +53,16 @@ an7581_xg040g_ensure_mac()
 
 	lan_mac="$(macaddr_add "$mac" 1)"
 
-	# wan (eth1) is a plain device, so the interface macaddr applies. lan is a
-	# bridge (br-lan); its MAC must be set on the bridge device section,
-	# otherwise the bridge keeps deriving a random MAC from the conduit.
-	ucidef_set_interface_macaddr "wan" "$mac"
+	# lan1 is the plain 2.5G device formerly exposed as eth1. br-lan needs
+	# an explicit MAC because otherwise it derives one from the conduit.
+	ucidef_set_network_device_mac "lan1" "$mac"
 	ucidef_set_network_device_mac "br-lan" "$lan_mac"
 }
 
 board_config_update
 board=$(board_name)
 an7581_setup_interfaces $board
-an7581_xg040g_ensure_mac $board
+an7581_xg040g_tcboot_ensure_mac $board
 board_config_flush
 
 exit 0

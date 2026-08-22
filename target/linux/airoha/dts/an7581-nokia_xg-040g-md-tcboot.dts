@@ -37,8 +37,6 @@
 };
 
 &gdm4 {
-	openwrt,netdev-name = "eth1";
-
 	/delete-property/ nvmem-cell-names;
 	/delete-property/ nvmem-cells;
 };
