@@ -243,9 +243,11 @@ static int rtldsa_93xx_setup(struct dsa_switch *ds)
 
 	priv->r->pie_init(priv);
 
-	err = rtldsa_tc_init(priv);
-	if (err)
-		return err;
+	if (priv->r->pie_rule_id_is_log_counter) {
+		err = rtldsa_tc_init(priv);
+		if (err)
+			return err;
+	}
 
 	priv->r->led_init(priv);
 
@@ -254,12 +256,12 @@ static int rtldsa_93xx_setup(struct dsa_switch *ds)
 
 static int rtldsa_phylink_fill_available_pcs(struct phylink_config *config,
 					     struct phylink_pcs **available_pcs,
-					     unsigned int num_available_pcs)
+					     unsigned int num_possible_pcs)
 {
 	struct dsa_port *dp = dsa_phylink_to_port(config);
 
 	return fwnode_phylink_pcs_parse(of_fwnode_handle(dp->dn),
-					available_pcs, &num_available_pcs);
+					available_pcs, num_possible_pcs);
 }
 
 static void rtldsa_phylink_get_caps(struct dsa_switch *ds, int port,
@@ -284,8 +286,8 @@ static void rtldsa_phylink_get_caps(struct dsa_switch *ds, int port,
 		__set_bit(PHY_INTERFACE_MODE_10G_QXGMII, config->supported_interfaces);
 	}
 
-	if (!fwnode_phylink_pcs_parse(of_fwnode_handle(dp->dn), NULL,
-				      &config->num_available_pcs)) {
+	config->num_possible_pcs = fwnode_phylink_pcs_count(of_fwnode_handle(dp->dn));
+	if (config->num_possible_pcs) {
 		config->fill_available_pcs = rtldsa_phylink_fill_available_pcs;
 		bitmap_copy(config->pcs_interfaces, config->supported_interfaces,
 			    PHY_INTERFACE_MODE_MAX);
@@ -2551,16 +2553,20 @@ out:
 
 static const struct flow_action_entry *rtldsa_rate_policy_extract(struct flow_cls_offload *cls)
 {
-	struct flow_rule *rule;
+	struct flow_rule *rule = flow_cls_offload_flow_rule(cls);
 
 	/* only simple rules with a single action are supported */
-	rule = flow_cls_offload_flow_rule(cls);
-
-	if (!flow_action_basic_hw_stats_check(&cls->rule->action,
-					      cls->common.extack))
+	if (!flow_offload_has_one_action(&rule->action))
 		return NULL;
 
-	if (!flow_offload_has_one_action(&rule->action))
+	/* Anything that is not a policer is offloaded to PIE. Bail out before
+	 * flow_action_basic_hw_stats_check() so it does not stamp a "HW stats
+	 * type unsupported" extack onto a rule the PIE path accepts.
+	 */
+	if (rule->action.entries[0].id != FLOW_ACTION_POLICE)
+		return NULL;
+
+	if (!flow_action_basic_hw_stats_check(&rule->action, cls->common.extack))
 		return NULL;
 
 	return &rule->action.entries[0];
@@ -2596,13 +2602,14 @@ static int rtldsa_cls_flower_add(struct dsa_switch *ds, int port,
 	const struct flow_action_entry *act;
 	int ret;
 
-	if (!priv->r->port_rate_police_add)
-		return -EOPNOTSUPP;
-
-	/* the single action must be a rate/bandwidth limiter */
+	/* a single rate/bandwidth limiter action is handled as port policing */
 	act = rtldsa_rate_policy_extract(cls);
 
+	/* everything else is offloaded to the PIE engine */
 	if (!rtldsa_port_rate_police_validate(act))
+		return rtldsa_pie_cls_flower_add(priv, port, cls, ingress);
+
+	if (!priv->r->port_rate_police_add)
 		return -EOPNOTSUPP;
 
 	mutex_lock(&priv->reg_mutex);
@@ -2641,6 +2648,15 @@ static int rtldsa_cls_flower_del(struct dsa_switch *ds, int port,
 	struct rtldsa_port *p = &priv->ports[port];
 	int ret;
 
+	/* PIE flower rules are ingress only. Try to remove a PIE rule first;
+	 * if none exists for this cookie, fall back to port rate policing.
+	 */
+	if (ingress) {
+		ret = rtldsa_pie_cls_flower_del(priv, cls, ingress);
+		if (ret != -ENOENT)
+			return ret;
+	}
+
 	if (!priv->r->port_rate_police_del)
 		return -EOPNOTSUPP;
 
@@ -2657,6 +2673,23 @@ static int rtldsa_cls_flower_del(struct dsa_switch *ds, int port,
 
 unlock:
 	mutex_unlock(&priv->reg_mutex);
+
+	return ret;
+}
+
+static int rtldsa_cls_flower_stats(struct dsa_switch *ds, int port,
+				   struct flow_cls_offload *cls, bool ingress)
+{
+	struct rtl838x_switch_priv *priv = ds->priv;
+	int ret;
+
+	/* only PIE flower rules provide per-rule statistics, and only ingress */
+	if (!ingress)
+		return 0;
+
+	ret = rtldsa_pie_cls_flower_stats(priv, cls, ingress);
+	if (ret == -ENOENT)
+		return 0;
 
 	return ret;
 }
@@ -2786,4 +2819,5 @@ const struct dsa_switch_ops rtldsa_93xx_switch_ops = {
 
 	.cls_flower_add		= rtldsa_cls_flower_add,
 	.cls_flower_del		= rtldsa_cls_flower_del,
+	.cls_flower_stats	= rtldsa_cls_flower_stats,
 };
