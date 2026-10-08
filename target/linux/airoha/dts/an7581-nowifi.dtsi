@@ -470,15 +470,17 @@
 			      <0x0 0x1fa86000 0x0 0x300>,
 			      <0x0 0x1fa8a000 0x0 0x1000>,
 			      <0x0 0x1fa8b000 0x0 0x1000>;
-			reg-names = "xfi_mac", "hsgmii_an", "hsgmii_pcs",
+			reg-names = "pcs_mac", "hsgmii_an", "hsgmii_pcs",
 				    "multi_sgmii", "usxgmii",
-				    "hsgmii_rate_adp", "xfi_ana", "xfi_pma";
+				    "hsgmii_rate_adp", "pcs_ana", "pcs_pma";
 
 			resets = <&scuclk EN7581_XPON_MAC_RST>,
 				 <&scuclk EN7581_XPON_PHY_RST>;
 			reset-names = "mac", "phy";
 
 			airoha,scu = <&scuclk>;
+
+			#pcs-cells = <0>;
 		};
 
 		eth_pcs: pcs@1fa09000 {
@@ -491,15 +493,17 @@
 			      <0x0 0x1fa76000 0x0 0x300>,
 			      <0x0 0x1fa7a000 0x0 0x1000>,
 			      <0x0 0x1fa7b000 0x0 0x1000>;
-			reg-names = "xfi_mac", "hsgmii_an", "hsgmii_pcs",
+			reg-names = "pcs_mac", "hsgmii_an", "hsgmii_pcs",
 				    "multi_sgmii", "usxgmii",
-				    "hsgmii_rate_adp", "xfi_ana", "xfi_pma";
+				    "hsgmii_rate_adp", "pcs_ana", "pcs_pma";
 
 			resets = <&scuclk EN7581_XSI_MAC_RST>,
 				 <&scuclk EN7581_XSI_PHY_RST>;
 			reset-names = "mac", "phy";
 
 			airoha,scu = <&scuclk>;
+
+			#pcs-cells = <0>;
 		};
 
 		chip_scu: syscon@1fa20000 {
@@ -909,7 +913,7 @@
 			gdm2: ethernet@2 {
 				compatible = "airoha,eth-mac";
 				reg = <2>;
-				pcs = <&pon_pcs>;
+				pcs-handle = <&pon_pcs>;
 
 				status = "disabled";
 			};
@@ -917,7 +921,7 @@
 			gdm4: ethernet@4 {
 				compatible = "airoha,eth-mac";
 				reg = <4>;
-				pcs = <&eth_pcs>;
+				pcs-handle = <&eth_pcs>;
 
 				status = "disabled";
 			};
