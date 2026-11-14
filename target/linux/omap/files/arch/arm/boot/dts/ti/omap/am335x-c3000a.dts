@@ -792,3 +792,29 @@
 &rng {
 	status = "okay";
 };
+
+&gpio0 {
+	gprs-pwr-hog {
+		gpio-hog;
+		gpios = <18 GPIO_ACTIVE_HIGH>;
+		output-high;
+		line-name = "gprs-pwr-en";
+	};
+
+	gprs-rst-hog {
+		gpio-hog;
+		gpios = <4 GPIO_ACTIVE_LOW>;
+		output-low;
+		line-name = "gprs-rst";
+	};
+};
+
+&gpio3 {
+	lcd-pwr-hog {
+		gpio-hog;
+		gpios = <13 GPIO_ACTIVE_LOW>;
+		output-high;
+		line-name = "lcd-pwr-en";
+	};
+};
+
