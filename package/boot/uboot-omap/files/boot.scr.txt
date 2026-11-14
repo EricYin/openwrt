@@ -2,6 +2,10 @@ if test -z "${devnum}"; then
 	setenv devnum 0
 fi
 
+if test -e mmc ${devnum}:1 /dtbs/am335x-c3000a.dtb; then
+	setenv fdtfile am335x-c3000a.dtb
+fi
+
 setenv bootargs console=${console} root=/dev/mmcblk${devnum}p2 rootwait
 
 load mmc ${devnum}:1 ${loadaddr} /zImage \
