@@ -76,4 +76,16 @@ endef
 
 TARGET_DEVICES += ti_omap3-beagle
 
+define Device/ti_am335x-c3000a
+  DEVICE_VENDOR := TI
+  DEVICE_MODEL := AM335x C3000A Board
+  DEVICE_DTS := ti/omap/am335x-c3000a
+  KERNEL := kernel-bin | append-dtb
+  IMAGES := sdcard.img.gz
+  IMAGE/sdcard.img.gz := boot-common | boot-script | sdcard-img | gzip
+  DEVICE_PACKAGES := kmod-can kmod-can-c-can kmod-can-c-can-platform kmod-rtc-rx8025 kmod-usb-net-rndis
+endef
+
+TARGET_DEVICES += ti_am335x-c3000a
+
 $(eval $(call BuildImage))
