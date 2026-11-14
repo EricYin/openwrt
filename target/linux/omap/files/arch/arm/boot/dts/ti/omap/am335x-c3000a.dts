@@ -566,7 +566,7 @@
 	};
 };
 
-&cpu0 {
+&cpu {
 	cpu0-supply = <&vdd1_reg>;
 };
 
