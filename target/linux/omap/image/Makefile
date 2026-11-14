@@ -80,7 +80,9 @@ define Device/ti_am335x-c3000a
   DEVICE_VENDOR := TI
   DEVICE_MODEL := AM335x C3000A Board
   DEVICE_DTS := am335x-c3000a
-  DEVICE_PACKAGES := kmod-can kmod-can-c-can kmod-can-c-can-platform kmod-rtc-rx8025 kmod-usb-net-rndis
+  DEVICE_PACKAGES := kmod-can kmod-can-c-can kmod-can-c-can-platform \
+    kmod-rtc-rx8025 kmod-usb-net-rndis kmod-usb-serial-ftdi \
+    kmod-gpio-pca953x kmod-bluetooth bluez-utils
 endef
 
 TARGET_DEVICES += ti_am335x-c3000a
