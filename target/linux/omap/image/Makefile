@@ -84,8 +84,6 @@ define Device/ti_am335x-c3000a
     kmod-phy-at803x kmod-usb-net-rndis kmod-usb-serial-ftdi \
     kmod-bluetooth bluez-utils
 endef
-TARGET_DEVICES += ti_am335x-c3000a
-
 
 TARGET_DEVICES += ti_am335x-c3000a
 
