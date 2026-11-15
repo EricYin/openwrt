@@ -13,6 +13,12 @@
 	aliases {
 		rtc0 = &rtc_rx8025;
 		rtc1 = &rtc;
+        serial0 = &uart0;
+		serial1 = &uart1;
+		serial2 = &uart2;
+		serial3 = &uart3;
+		serial4 = &uart4;
+		serial5 = &uart5;
 	};
 
 	chosen {
@@ -326,10 +332,11 @@
 
 	davinci_mdio_default: davinci-mdio-default {
 		pinctrl-single,pins = <
-			0x148 0x70	/* mdio_data */
-			0x14c 0x10	/* mdio_clk */
+			0x148 (PIN_INPUT_PULLUP | SLEWCTRL_FAST | MUX_MODE0)	/* mdio_data.mdio_data */
+			0x14c (PIN_OUTPUT_PULLUP | SLEWCTRL_FAST | MUX_MODE0)	/* mdio_clk.mdio_clk */
 		>;
 	};
+
 
 	davinci_mdio_sleep: davinci-mdio-sleep {
 		pinctrl-single,pins = <
