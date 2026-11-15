@@ -835,6 +835,8 @@
 };
 
 &gpio3 {
+    pinctrl-names = "default";
+	pinctrl-0 = <&lcd_pwr_pins>;
 	lcd-pwr-hog {
 		gpio-hog;
 		gpios = <13 GPIO_ACTIVE_LOW>;
