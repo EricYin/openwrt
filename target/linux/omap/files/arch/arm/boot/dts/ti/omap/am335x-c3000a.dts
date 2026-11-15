@@ -154,11 +154,9 @@
 			"LINE2L", "Line In",
 			"LINE1R", "Line In",
 			"LINE2R", "Line In";
-		simple-audio-card,format = "dsp_b";
+		simple-audio-card,format = "i2s";
 		simple-audio-card,bitclock-master = <&sound_master>;
 		simple-audio-card,frame-master = <&sound_master>;
-		simple-audio-card,bitclock-inversion;
-		simple-audio-card,mclk-fs = <256>;
 
 		simple-audio-card,cpu {
 			sound-dai = <&mcasp0>;
@@ -588,6 +586,7 @@
 	tps: tps@2d {
 		reg = <0x2d>;
 		compatible = "ti,tps65910";
+		ti,system-power-controller;
 		vcc1-supply = <&vbat>;
 		vcc2-supply = <&vbat>;
 		vcc3-supply = <&vbat>;
@@ -598,15 +597,24 @@
 		vccio-supply = <&vbat>;
 
 		regulators {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
 			vrtc_reg: regulator@0 {
+				reg = <0>;
+				regulator-compatible = "vrtc";
 				regulator-always-on;
 			};
 
 			vio_reg: regulator@1 {
+				reg = <1>;
+				regulator-compatible = "vio";
 				regulator-always-on;
 			};
 
 			vdd1_reg: regulator@2 {
+				reg = <2>;
+				regulator-compatible = "vdd1";
 				regulator-name = "vdd_mpu";
 				regulator-min-microvolt = <912500>;
 				regulator-max-microvolt = <1378000>;
@@ -615,6 +623,8 @@
 			};
 
 			vdd2_reg: regulator@3 {
+				reg = <3>;
+				regulator-compatible = "vdd2";
 				regulator-name = "vdd_core";
 				regulator-min-microvolt = <912500>;
 				regulator-max-microvolt = <1150000>;
@@ -623,38 +633,56 @@
 			};
 
 			vdd3_reg: regulator@4 {
+				reg = <4>;
+				regulator-compatible = "vdd3";
 				regulator-always-on;
 			};
 
 			vdig1_reg: regulator@5 {
+				reg = <5>;
+				regulator-compatible = "vdig1";
 				regulator-always-on;
 			};
 
 			vdig2_reg: regulator@6 {
+				reg = <6>;
+				regulator-compatible = "vdig2";
 				regulator-always-on;
 			};
 
 			vpll_reg: regulator@7 {
+				reg = <7>;
+				regulator-compatible = "vpll";
 				regulator-always-on;
 			};
 
 			vdac_reg: regulator@8 {
+				reg = <8>;
+				regulator-compatible = "vdac";
 				regulator-always-on;
 			};
 
 			vaux1_reg: regulator@9 {
+				reg = <9>;
+				regulator-compatible = "vaux1";
 				regulator-always-on;
 			};
 
 			vaux2_reg: regulator@10 {
+				reg = <10>;
+				regulator-compatible = "vaux2";
 				regulator-always-on;
 			};
 
 			vaux33_reg: regulator@11 {
+				reg = <11>;
+				regulator-compatible = "vaux33";
 				regulator-always-on;
 			};
 
 			vmmc_reg: regulator@12 {
+				reg = <12>;
+				regulator-compatible = "vmmc";
 				regulator-min-microvolt = <1800000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-always-on;
