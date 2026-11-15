@@ -173,7 +173,7 @@
 &am33xx_pinmux {
 	/* 将无主线专用驱动的板级控制引脚(GPRS/LCD使能)纳入默认初始化组 */
 	pinctrl-names = "default";
-	pinctrl-0 = <&board_misc_gpio_pins>;
+	/*pinctrl-0 = <&board_misc_gpio_pins>;*/
 
 	board_misc_gpio_pins: board-misc-gpio-pins {
 		pinctrl-single,pins = <
@@ -802,6 +802,9 @@
 };
 
 &gpio0 {
+    pinctrl-names = "default";
+	pinctrl-0 = <&board_misc_gpio_pins>;
+
 	gprs-pwr-hog {
 		gpio-hog;
 		gpios = <18 GPIO_ACTIVE_HIGH>;
