@@ -63,7 +63,7 @@
 		compatible = "gpio-beeper";
 		pinctrl-names = "default";
 		pinctrl-0 = <&buzzer_gpio_pins>;
-		gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
+		gpios = <&gpio1 28 GPIO_ACTIVE_LOW>;
 	};
 
 	volume-keys {
@@ -198,7 +198,7 @@
 
 	buzzer_gpio_pins: buzzer-gpio-pins {
 		pinctrl-single,pins = <
-			0x78 0x00 0x07	/* gpmc_be1n.gpio1_28 */
+			0x78 0x00 0x17	/* gpmc_be1n.gpio1_28 */
 		>;
 	};
 
@@ -392,8 +392,8 @@
 
 	davinci_mdio_default: davinci-mdio-default {
 		pinctrl-single,pins = <
-			0x148 0x00 (PIN_INPUT_PULLUP | SLEWCTRL_FAST | MUX_MODE0)	/* mdio_data.mdio_data */
-			0x14c 0x00 (PIN_OUTPUT_PULLUP | SLEWCTRL_FAST | MUX_MODE0)	/* mdio_clk.mdio_clk */
+			0x148 0x00 0x70	/* mdio_data.mdio_data */
+			0x14c 0x00 0x10	/* mdio_clk.mdio_clk */
 		>;
 	};
 
@@ -786,13 +786,13 @@
 
 &cpsw_port1 {
 	phy-handle = <&ethphy0>;
-	phy-mode = "rgmii-id";
+	phy-mode = "rgmii-txid";
 	ti,dual-emac-pvid = <1>;
 };
 
 &cpsw_port2 {
 	phy-handle = <&ethphy2>;
-	phy-mode = "rgmii-id";
+	phy-mode = "rgmii-txid";
 	ti,dual-emac-pvid = <2>;
 };
 
