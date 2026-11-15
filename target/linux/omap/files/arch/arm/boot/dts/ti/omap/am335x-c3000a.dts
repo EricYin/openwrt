@@ -198,7 +198,7 @@
 
 	buzzer_gpio_pins: buzzer-gpio-pins {
 		pinctrl-single,pins = <
-			0x78 0x00 0x17	/* gpmc_be1n.gpio1_28 */
+			0x78 0x00 0x07	/* gpmc_be1n.gpio1_28 */
 		>;
 	};
 
