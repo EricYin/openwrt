@@ -142,14 +142,14 @@
 			"Line", "Line Out",
 			"Microphone", "Mic Jack",
 			"Line", "Line In";
-		simple-audio-card,routing =
+				simple-audio-card,routing =
 			"Headphone Jack", "HPLOUT",
 			"Headphone Jack", "HPROUT",
 			"Line Out", "LLOUT",
 			"Line Out", "RLOUT",
 			"MIC3L", "Mic Bias",
 			"MIC3R", "Mic Bias",
-			"Mic Bias", "Mic Jack",
+			"Mic Jack", "Mic Bias",
 			"LINE1L", "Line In",
 			"LINE2L", "Line In",
 			"LINE1R", "Line In",
@@ -702,7 +702,7 @@
 		AVDD-supply = <&vaux2_reg>;
 		IOVDD-supply = <&vaux2_reg>;
 		DRVDD-supply = <&vaux2_reg>;
-		DVDD-supply = <&vbat>;
+		DVDD-supply = <&vdig1_reg>;
 	};
 
 	pca9535: gpio@20 {
