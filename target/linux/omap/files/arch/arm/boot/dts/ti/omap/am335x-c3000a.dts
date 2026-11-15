@@ -172,16 +172,30 @@
 
 &am33xx_pinmux {
 	/* 将无主线专用驱动的板级控制引脚(GPRS/LCD使能)纳入默认初始化组 */
-	pinctrl-names = "default";
+	/*pinctrl-names = "default";*/
 	/*pinctrl-0 = <&board_misc_gpio_pins>;*/
-
-	board_misc_gpio_pins: board-misc-gpio-pins {
+    
+    /* 1. 替换 &am33xx_pinmux 中的 board_misc_gpio_pins（并删除 &am33xx_pinmux 顶部的 pinctrl-names 和 pinctrl-0） */
+	gprs_gpio_pins: gprs-gpio-pins {
 		pinctrl-single,pins = <
-			0x21c 0x17	/* usb0_drvvbus.gpio0_18 (GPRS PWR/EN) */
-			0x158 0x07	/* spi0_d1.gpio0_4 (GPRS RST) */
-			0x234 0x07	/* usb1_drvvbus.gpio3_13 (LCD PWR/EN) */
+			0x21c 0x00 0x17   /* usb0_drvvbus.gpio0_18 (GPRS PWR/EN) */
+			0x158 0x00 0x07   /* spi0_d1.gpio0_4 (GPRS RST) */
 		>;
 	};
+
+	lcd_pwr_pins: lcd-pwr-pins {
+		pinctrl-single,pins = <
+			0x234 0x00 0x07  /* usb1_drvvbus.gpio3_13 (LCD PWR/EN) */
+		>;
+	};
+
+	/*board_misc_gpio_pins: board-misc-gpio-pins {
+		pinctrl-single,pins = <
+			0x21c 0x17	
+			0x158 0x07	
+			0x234 0x07	
+		>;
+	};*/
 
 	buzzer_gpio_pins: buzzer-gpio-pins {
 		pinctrl-single,pins = <
@@ -803,7 +817,7 @@
 
 &gpio0 {
     pinctrl-names = "default";
-	pinctrl-0 = <&board_misc_gpio_pins>;
+	pinctrl-0 = <&gprs_gpio_pins>;
 
 	gprs-pwr-hog {
 		gpio-hog;
