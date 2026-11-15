@@ -81,10 +81,9 @@ define Device/ti_am335x-c3000a
   DEVICE_MODEL := AM335x C3000A Board
   DEVICE_DTS := am335x-c3000a
   DEVICE_PACKAGES := kmod-can kmod-can-c-can kmod-can-c-can-platform \
-    kmod-gpio-pca953x kmod-rtc-rx8025 kmod-phy-at803x kmod-usb-net-rndis kmod-usb-serial-ftdi \
-    kmod-bluetooth bluez-utils
+    kmod-usb-net-rndis kmod-usb-serial-ftdi \
+    bluez-daemon bluez-utils
 endef
-
 TARGET_DEVICES += ti_am335x-c3000a
 
 $(eval $(call BuildImage))
