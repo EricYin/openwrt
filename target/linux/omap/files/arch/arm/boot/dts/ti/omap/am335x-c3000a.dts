@@ -8,7 +8,7 @@
 #include <dt-bindings/gpio/gpio.h>
 
 / {
-	model = "TI AM335x Custom Board";
+	model = "TI AM335x C3000A";
 	compatible = "ti,am335x-evm", "ti,am33xx";
 
 	aliases {
