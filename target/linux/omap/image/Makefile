@@ -18,6 +18,7 @@ define Build/omap-sdcard
 	mcopy -i $@.boot $(STAGING_DIR_IMAGE)/$(DEVICE_NAME)/MLO ::MLO
 	mcopy -i $@.boot $(STAGING_DIR_IMAGE)/$(DEVICE_NAME)/u-boot.img ::u-boot.img
 	mcopy -i $@.boot $(STAGING_DIR_IMAGE)/$(DEVICE_NAME)/boot.scr ::boot.scr
+    mcopy -i $@.boot $(CURDIR)/uEnv.txt ::uEnv.txt
     mmd -i $@.boot ::/dtbs
 	mcopy -i $@.boot $(if $(wildcard $(KDIR)/image-$(DEVICE_DTS).dtb),$(KDIR)/image-$(DEVICE_DTS).dtb,$(DTS_DIR)/$(DEVICE_DTS).dtb) ::/dtbs/$(DEVICE_DTS).dtb
     mcopy -i $@.boot $(IMAGE_KERNEL) ::/zImage
