@@ -1,0 +1,2 @@
+console=ttyS0,115200n8
+uenvcmd=setenv bootargs console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait; fatload mmc 0:1 0x82000000 /zImage; fatload mmc 0:1 0x88000000 /dtbs/am335x-c3000a.dtb; bootz 0x82000000 - 0x88000000
