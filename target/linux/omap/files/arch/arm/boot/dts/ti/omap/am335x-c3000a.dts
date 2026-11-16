@@ -12,8 +12,8 @@
 	compatible = "ti,am335x-evm", "ti,am33xx";
 
 	aliases {
-		rtc0 = &rtc_rx8025;
-		rtc1 = &rtc;
+		/*rtc0 = &rtc_rx8025;
+		rtc1 = &rtc;*/
         serial0 = &uart0;
 		serial1 = &uart1;
 		serial2 = &uart2;
@@ -718,13 +718,15 @@
 };
 
 &wkup_m3_ipc {
-	ti,scale-data-fw = "am335x-evm-scale-data.bin";
+	/*ti,scale-data-fw = "am335x-evm-scale-data.bin";*/
+    firmware-name = "am335x-evm-scale-data.bin";
 };
 
 &mmc1 {
 	status = "okay";
 	vmmc-supply = <&vmmc_reg>;
 	bus-width = <4>;
+    cd-debounce-delay-ms = <0>;
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&mmc1_pins>;
 	pinctrl-1 = <&mmc1_pins_sleep>;
@@ -783,7 +785,6 @@
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&cpsw_default>;
 	pinctrl-1 = <&cpsw_sleep>;
-    ti,dual-emac;
 	status = "okay";
 };
 
