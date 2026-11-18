@@ -160,6 +160,8 @@
 
 		simple-audio-card,cpu {
 			sound-dai = <&mcasp0>;
+			system-clock-frequency = <24000000>;
+			system-clock-direction-out;
 		};
 
 		sound_master: simple-audio-card,codec {
