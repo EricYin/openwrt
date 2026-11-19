@@ -562,7 +562,7 @@
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&uart3_pins_default>;
 	pinctrl-1 = <&uart3_pins_sleep>;
-	status = "disabled";
+	status = "okay";
 };
 
 &uart4 {
