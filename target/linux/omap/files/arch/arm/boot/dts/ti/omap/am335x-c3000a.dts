@@ -184,6 +184,14 @@
 		>;
 	};
 
+ 	bt_gps_ctrl_pins: bt-gps-ctrl-pins {
+		pinctrl-single,pins = <
+			0x84 0x00 0x07	/* gpmc_csn2.gpio1_31 (原厂 GPIO 63: GPS_RST) */
+			0x88 0x00 0x07	/* gpmc_csn3.gpio2_0  (原厂 GPIO 64: BT_RST) */
+			0x8c 0x00 0x07	/* gpmc_clk.gpio2_1   (原厂 GPIO 65: BT_EN) */
+		>;
+	};
+
 	lcd_pwr_pins: lcd-pwr-pins {
 		pinctrl-single,pins = <
 			0x234 0x00 0x07  /* usb1_drvvbus.gpio3_13 (LCD PWR/EN) */
@@ -552,13 +560,15 @@
  */
 
 &uart2 {
+    /* RS232 */
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&uart2_pins_default>;
 	pinctrl-1 = <&uart2_pins_sleep>;
-	status = "disabled";
+	status = "okay";
 };
 
 &uart3 {
+    /* GPS */
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&uart3_pins_default>;
 	pinctrl-1 = <&uart3_pins_sleep>;
@@ -566,17 +576,19 @@
 };
 
 &uart4 {
+    /* RS485 */
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&uart4_pins_default>;
 	pinctrl-1 = <&uart4_pins_sleep>;
-	status = "disabled";
+	status = "okay";
 };
 
 &uart5 {
+    /* BT */
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&uart5_pins_default>;
 	pinctrl-1 = <&uart5_pins_sleep>;
-	status = "disabled";
+	status = "okay";
 };
 
 &i2c0 {
@@ -712,6 +724,20 @@
 		gpio-controller;
 		#gpio-cells = <2>;
 		reg = <0x20>;
+
+        bt-rts-hog {
+			gpio-hog;
+			gpios = <1 GPIO_ACTIVE_HIGH>;
+			output-high; /* 原厂 GPIO 241 = 1 */
+			line-name = "bt-rts";
+		};
+
+		gps-pwr-hog {
+			gpio-hog;
+			gpios = <3 GPIO_ACTIVE_HIGH>;
+			output-high; /* 原厂 GPIO 243 = 1 */
+			line-name = "gps-pwr";
+		};
 	};
 };
 
@@ -962,6 +988,34 @@
 		gpios = <4 GPIO_ACTIVE_LOW>;
 		output-low;
 		line-name = "gprs-rst";
+	};
+};
+
+&gpio1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&bt_gps_ctrl_pins>;
+
+	gps-rst-hog {
+		gpio-hog;
+		gpios = <31 GPIO_ACTIVE_HIGH>;
+		output-low; /* 原厂 GPIO 63 = 0 */
+		line-name = "gps-rst";
+	};
+};
+
+&gpio2 {
+	bt-rst-hog {
+		gpio-hog;
+		gpios = <0 GPIO_ACTIVE_HIGH>;
+		output-low; /* 原厂 GPIO 64 = 0 */
+		line-name = "bt-rst";
+	};
+
+	bt-en-hog {
+		gpio-hog;
+		gpios = <1 GPIO_ACTIVE_HIGH>;
+		output-low; /* 原厂 GPIO 65 = 0 */
+		line-name = "bt-en";
 	};
 };
 
