@@ -50,7 +50,7 @@
 	leds {
 		compatible = "gpio-leds";
 		pinctrl-names = "default";
-		pinctrl-0 = <&led_gpio_pins>;
+        pinctrl-0 = <&led_gpio_pins &bt_gps_ctrl_pins>;
 
 		led-status {
 			label = "status:green:usr0";
@@ -62,6 +62,12 @@
 			label = "bt-en";
 			gpios = <&gpio2 1 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
+		};
+
+        bt-rst {
+			label = "bt-rst";
+			gpios = <&gpio2 0 GPIO_ACTIVE_HIGH>;
+			default-state = "off"; /* 开机默认低电平(0)，释放蓝牙复位 */
 		};
 
 		bt-rts {
@@ -998,20 +1004,6 @@
 		gpios = <4 GPIO_ACTIVE_LOW>;
 		output-low;
 		line-name = "gprs-rst";
-	};
-};
-
-&gpio1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&bt_gps_ctrl_pins>;
-};
-
-&gpio2 {
-	bt-rst-hog {
-		gpio-hog;
-		gpios = <0 GPIO_ACTIVE_HIGH>;
-		output-high; /* 原厂 GPIO 64 = 0 */
-		line-name = "bt-rst";
 	};
 };
 
