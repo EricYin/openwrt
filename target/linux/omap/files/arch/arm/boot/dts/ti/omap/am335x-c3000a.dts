@@ -728,7 +728,7 @@
         bt-rts-hog {
 			gpio-hog;
 			gpios = <1 GPIO_ACTIVE_HIGH>;
-			output-high; /* 原厂 GPIO 241 = 1 */
+			output-low; /* 原厂 GPIO 241 = 1 */
 			line-name = "bt-rts";
 		};
 
