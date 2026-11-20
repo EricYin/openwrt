@@ -57,6 +57,24 @@
 			gpios = <&gpio1 30 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "heartbeat";
 		};
+
+        bt-en {
+			label = "bt-en";
+			gpios = <&gpio2 1 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+
+		bt-rts {
+			label = "bt-rts";
+			gpios = <&pca9535 1 GPIO_ACTIVE_LOW>;
+			default-state = "on";
+		};
+
+		gps-pwr {
+			label = "gps-pwr";
+			gpios = <&pca9535 3 GPIO_ACTIVE_HIGH>;
+			default-state = "on";
+		};
 	};
 
 	beeper {
@@ -724,20 +742,6 @@
 		gpio-controller;
 		#gpio-cells = <2>;
 		reg = <0x20>;
-
-        bt-rts-hog {
-			gpio-hog;
-			gpios = <1 GPIO_ACTIVE_HIGH>;
-			output-low; /* 原厂 GPIO 241 = 1 */
-			line-name = "bt-rts";
-		};
-
-		gps-pwr-hog {
-			gpio-hog;
-			gpios = <3 GPIO_ACTIVE_HIGH>;
-			output-high; /* 原厂 GPIO 243 = 1 */
-			line-name = "gps-pwr";
-		};
 	};
 };
 
@@ -1009,13 +1013,6 @@
 		gpios = <0 GPIO_ACTIVE_HIGH>;
 		output-high; /* 原厂 GPIO 64 = 0 */
 		line-name = "bt-rst";
-	};
-
-	bt-en-hog {
-		gpio-hog;
-		gpios = <1 GPIO_ACTIVE_HIGH>;
-		output-high; /* 原厂 GPIO 65 = 0 */
-		line-name = "bt-en";
 	};
 };
 
