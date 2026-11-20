@@ -592,7 +592,7 @@
 };
 
 &uart3 {
-    /* GPS */
+    /* GPS ! and BT ? */
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&uart3_pins_default>;
 	pinctrl-1 = <&uart3_pins_sleep>;
@@ -608,7 +608,7 @@
 };
 
 &uart5 {
-    /* BT */
+    /* ESAM */
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&uart5_pins_default>;
 	pinctrl-1 = <&uart5_pins_sleep>;
