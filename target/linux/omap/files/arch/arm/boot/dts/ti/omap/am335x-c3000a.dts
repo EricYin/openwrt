@@ -1007,14 +1007,14 @@
 	bt-rst-hog {
 		gpio-hog;
 		gpios = <0 GPIO_ACTIVE_HIGH>;
-		output-low; /* 原厂 GPIO 64 = 0 */
+		output-high; /* 原厂 GPIO 64 = 0 */
 		line-name = "bt-rst";
 	};
 
 	bt-en-hog {
 		gpio-hog;
 		gpios = <1 GPIO_ACTIVE_HIGH>;
-		output-low; /* 原厂 GPIO 65 = 0 */
+		output-high; /* 原厂 GPIO 65 = 0 */
 		line-name = "bt-en";
 	};
 };
