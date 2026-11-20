@@ -75,6 +75,12 @@
 			gpios = <&pca9535 3 GPIO_ACTIVE_HIGH>;
 			default-state = "on";
 		};
+
+        gps-rst {
+			label = "gps-rst";
+			gpios = <&gpio1 31 GPIO_ACTIVE_HIGH>;
+			default-state = "off"; /* 开机默认低电平(0)，正常使用GPS */
+		};
 	};
 
 	beeper {
@@ -998,13 +1004,6 @@
 &gpio1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&bt_gps_ctrl_pins>;
-
-	gps-rst-hog {
-		gpio-hog;
-		gpios = <31 GPIO_ACTIVE_HIGH>;
-		output-low; /* 原厂 GPIO 63 = 0 */
-		line-name = "gps-rst";
-	};
 };
 
 &gpio2 {
