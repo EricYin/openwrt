@@ -58,7 +58,7 @@
 			linux,default-trigger = "heartbeat";
 		};
 
-        bt-en {
+        /*bt-en {
 			label = "bt-en";
 			gpios = <&gpio2 1 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
@@ -74,12 +74,12 @@
 			label = "bt-rts";
 			gpios = <&pca9535 1 GPIO_ACTIVE_LOW>;
 			default-state = "on";
-		};
+		};*/
 
 		gps-pwr {
 			label = "gps-pwr";
 			gpios = <&pca9535 3 GPIO_ACTIVE_HIGH>;
-			default-state = "on";
+			default-state = "off";
 		};
 
         gps-rst {
