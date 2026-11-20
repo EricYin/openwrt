@@ -67,7 +67,7 @@
         bt-rst {
 			label = "bt-rst";
 			gpios = <&gpio2 0 GPIO_ACTIVE_HIGH>;
-			default-state = "off"; /* 开机默认低电平(0)，释放蓝牙复位 */
+			default-state = "off"; 
 		};
 
 		bt-rts {
